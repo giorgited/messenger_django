@@ -1,0 +1,37 @@
+{% extends 'logedin_base.html' %} {% block body%}
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="container">
+            {% csrf_token %}
+            <div class="container">
+                <p>
+
+                    Username: {{user.username}}<br> First Name: {{ user.first_name }}<br> Last Name: {{ user.last_name }}<br> Email: {{ user.email }}<br>
+                </p>
+            </div>
+
+            <button class="btn btn-md btn-success" id="edit" name="button">Edit</button>
+        </div>
+    </div>
+    <div class="col-lg-4" id="edit_form" hidden="true">
+        <div class="container">
+            <form method="post">
+                    {% csrf_token %} {{ form.as_p}}
+                    <button class="btn btn-md btn-success" type="submit" name="button">Update</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.getElementById("edit").onclick = function () {
+        myFunction()
+    };
+
+    function myFunction() {
+        document.getElementById("edit_form").hidden = false;
+    }
+</script>
+{% endblock %}
