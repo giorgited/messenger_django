@@ -1,0 +1,40 @@
+from django.shortcuts import render, HttpResponse, redirect
+from django.contrib.auth.forms import UserCreationForm
+from chats.forms import CreateChatForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserChangeForm
+from chats.models import ChatRoom
+from accounts.models import User
+
+def create_chat(request):
+    chatRoom = ChatRoom()
+    chatRoom.name = 'test'
+    chatRoom.description = 'desc'
+    #chatRoom.save()
+
+    if request.method == 'POST':
+        form = CreateChatForm(request.POST)   
+        form.user = request.user     
+        if form.is_valid():
+            chat = form.save(commit=False)
+            chat.user = request.user
+            chat.save()
+            return redirect('/chats/chat?chatID=' + str(chat.pk), {'chat':chat})
+        else:
+            return render(request, 'accounts/home.html', {'form':form})
+    else:
+        form = CreateChatForm()
+        args = {
+            'form': form
+        }
+        return render(request, 'chats/create_chat.html', args)
+
+def join_chat(request):
+    rooms = ChatRoom.objects.all()
+    for room in rooms:
+        print (room.name)
+
+    return render(request, 'chats/join_chat.html', {'rooms': rooms})
+
+def entered_chat(request):
+    return render(request, 'chats/chat.html')

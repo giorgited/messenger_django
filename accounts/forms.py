@@ -37,3 +37,11 @@ class EditUserForm(UserChangeForm):
             'email',
             'password'
         )
+
+class PasswordChangeForm(UserChangeForm):
+    
+    class Meta:
+        model = User
+        fields = (
+            'password',         
+        )

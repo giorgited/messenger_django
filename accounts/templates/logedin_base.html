@@ -2,34 +2,41 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-        crossorigin="anonymous"> 
-    <meta charset="utf-8">     
-    {% block head %}
-    <nav class="navbar navbar-default">
-            <div class="container-fluid">
-              <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+  <meta charset="utf-8"> {% block head %}
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+          aria-controls="navbar">
                   <span class="sr-only">Toggle navigation</span>
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/accounts/">Messenger</a>
-              </div>
-              <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">    
-                  <li><a href="/accounts/user_info/">My Info</a></li>              
-                  <li><a href="/accounts/logout/">Logout</a></li>
-                </ul>
-              </div><!--/.nav-collapse -->
-            </div><!--/.container-fluid -->
-          </nav>
-    {% endblock %}
+        <a class="navbar-brand" href="/accounts/">Messenger</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse nav navbar-nav navbar-right">
+        <a class="btn btn-success navbar-btn" href="/chats/create_chat/">Create Chat</a>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/chats/join_chat">Join Chat</a></li>
+          <li><a href="/accounts/user_info/"><span class="glyphicon glyphicon-user"></span> My Info</a></li>
+          <li><a href="/accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+    <!--/.container-fluid -->
+  </nav>  
+  {{ form.errors }}
+  {{ form.non_field_errors }}
+  {% endblock %}
 </head>
 
 <body>
-    {% block body %} {% endblock %}
+  {% block body %} {% endblock %}
 </body>
 
 </html>

@@ -1,0 +1,17 @@
+{% extends 'logedin_base.html' %} {% block body%}
+
+<div class="row">
+    <div class="col-lg-4" id="edit_form" >
+        <div class="container">
+            <form method="post">
+                    {% csrf_token %} <div class="container">
+                            <p>            
+                                Name: {{form.name}}<br> Description: {{ form.description }}<br>
+                            </p>
+                        </div>
+                    <button class="btn btn-md btn-success" type="submit" name="button">Create</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
