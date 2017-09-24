@@ -1,0 +1,19 @@
+Steps to start the project:
+
+1. clone the repo
+2. cd into the project 
+3. If not already install python3, django 
+4. $source myvenv/bin/activate
+5. $python manage.py migrate (migrate the db)
+6. $python manage.py runserver (start the server and project) 
+7. go to localhost:8000
+
+Possible issues:
+1. File "manage.py", line 17, in <module>
+    "Couldn't import Django. Are you sure it's installed and "
+ImportError: Couldn't import Django. Are you sure it's installed and available on your PYTHONPATH environment variable? Did you forget to activate a virtual environment?
+
+   You either dont have django installed, or more likely you arent in (myvenv)
+   re run step #4
+2. project starts but its throwing errors regarding DB and sqlite
+  -- most likely you have not migrated properly, rerun step#5
