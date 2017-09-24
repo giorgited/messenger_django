@@ -37,4 +37,5 @@ def join_chat(request):
     return render(request, 'chats/join_chat.html', {'rooms': rooms})
 
 def entered_chat(request):
-    return render(request, 'chats/chat.html')
+    room = ChatRoom.objects.get(pk = request.GET.get('chatID'))
+    return render(request, 'chats/chat.html', {'room' : room})
