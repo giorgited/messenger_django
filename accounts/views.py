@@ -2,12 +2,13 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.forms import UserCreationForm
 from accounts.forms import (
                     RegistrationForm,
-                    EditUserForm,
-                    PasswordChangeForm
+                    EditUserForm                    
 )
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserChangeForm
-# Create your views here.
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+
+@login_required
 def home(request):
     return render(request, 'accounts/home.html', {'user': request.user})
 
@@ -42,16 +43,21 @@ def user_info(request):
         form = EditUserForm(instance = request.user)
         return render(request, 'accounts/userInfo.html', {'user': request.user, 'form': form})
 
+
+
+@login_required
 def change_password(request):
     if request.method == "POST":
-        form = PasswordChangeForm(request.POST, instance=request.user)
+        form = PasswordChangeForm(data=request.POST, user=request.user)
 
         if form.is_valid():
             form.save()
-
-            form = EditUserForm(instance = request.user)
+            update_session_auth_hash(request, form.user)
+            form = EditUserForm(instance = form.user)
             return render(request, 'accounts/userInfo.html', {'user': request.user, 'form': form})
+        else:
+            return redirect('/accounts/password-reset-change/change-password')
     else:
-        form = PasswordChangeForm(instance=request.user)
+        form = PasswordChangeForm(user=request.user)
         
-        return render(request, 'accounts/change_password.html', {'user': request.user, 'form': form})
+        return render(request, 'accounts/password-reset-change/change_password.html', {'user': request.user, 'form': form})

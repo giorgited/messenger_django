@@ -27,13 +27,13 @@
             </div><!--/.container-fluid -->
           </nav>
     {% endblock %}
-    
-    {{ form.errors }}
-    {{ form.non_field_errors }}
+
 </head>
 
 <body>
-    {% block body %} {% endblock %}
+    {% block body %}
+    {{ form.errors }} {{ form.non_field_errors }}
+     {% endblock %}
 </body>
 
 </html>

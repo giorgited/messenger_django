@@ -29,6 +29,7 @@
         {% csrf_token %} 
         {{ form.as_p}}
         <button class="btn btn-md btn-success" type="submit" name="button">Login</button>
+        <a href="/accounts/reset-password/" style="margin-left:20px;">Forgot Password</a>
     </form>
 </div>
 {% endblock %}

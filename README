@@ -8,6 +8,11 @@ Steps to start the project:
 6. $python manage.py runserver (start the server and project) 
 7. go to localhost:8000
 
+
+//to run email smtp in debugger mode run:
+    $python -m smtpd -n -c DebuggingServer localhost:1025
+
+    
 Possible issues:
 1. File "manage.py", line 17, in <module>
     "Couldn't import Django. Are you sure it's installed and "
