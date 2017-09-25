@@ -30,11 +30,20 @@
       // Correctly decide between ws:// and wss://
       var ws_path = "/chats/stream/";
       console.log("Connecting to " + ws_path);
-
+      var current_user_username = "";
+          //get the current user 
+            $.ajax({
+              method: 'GET',
+              url: '/chats/get_my_user_info',
+              success: function (data) {
+                current_user_username = data;
+              }          
+          });
       var webSocketBridge = new channels.WebSocketBridge();
       webSocketBridge.connect(ws_path);
       // Handle incoming messages
       webSocketBridge.listen(function(data) {
+
           // Decode the JSON
           console.log("Got websocket message", data);
           // Handle errors
@@ -49,11 +58,11 @@
                                   "<div class='row'>" +
                                     "<div class='col-xs-12 outer'>" +
                                       "<div class='row'>" +
-                                        "<div class='col-xs-4 leftcol fixed' id='room-users" + data.join + "'>" +
+                                        "<div class='col-xs-2 leftcol fixed' id='room-users" + data.join + "'>" +
                                           "<ol class='users_list'></ol>" +
                                         "</div>" +
-                                        "<div class='col-xs-8 rightcol scrollit' id='room-messages" + data.join + "'>" +
-                                          "<ol class='chat'></ol>" +
+                                        "<div class='col-xs-10 rightcol scrollit' id='room-messages" + data.join + "'>" +
+                                          "<ol id='chat'></ol>" +
                                         "</div>" +
                                         "<form><input class='textarea' type='text' placeholder='Type here! Press enter to send!'><button class='submit-message'>Send</button></form>" +
                                 "</div>")
@@ -93,11 +102,22 @@
               switch (data.msg_type) {
                   case 0:
                       // Message
-                  var ok_msg=   "<li class='self'>" +
-                      "<div class='msg'>"+
-                        "<p>" + data.username + "</p>" +
-                        "<p>" + data.message + "</p>"       
-                      "<p><time>20:18</time> </div> </li>";
+                      var ok_msg = "";
+                      var time = new Date();
+                      if (data.username == current_user_username){
+                          ok_msg=   "<li class='self'>" +
+                              "<div class='msg'>"+
+                                "<p><i>" + data.username + ":</i></p>" +
+                                "<p><b>" + data.message + "</b></p>"     +  
+                                "<p><time>" + time.getHours() + ":" + time.getMinutes() + "</time></div> </li></br>";
+                      } else {
+                        ok_msg=   "<li class='other'>" +
+                              "<div class='msg'>"+
+                                "<p><i>" + data.username + ":</i></p>" +
+                                "<p><b>" + data.message + "</b></p>" +      
+                                "<p><time>" + time.getHours() + ":" + time.getMinutes() + "</time></div> </li></br>";
+                      }
+                  
 
                       // ok_msg = "<div class='message'>" +
                       //         "<span class='username'>" + data.username + "</span>" +

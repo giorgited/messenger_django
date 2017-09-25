@@ -34,8 +34,13 @@ def join_chat(request):
     for room in rooms:
         print (room.name)
 
-    return render(request, 'chats/join_chat.html', {'rooms': rooms})
+    return render(request, 'chats/join_chat.html', {'rooms': rooms, 'user': request.user})
 
 def entered_chat(request):
     room = ChatRoom.objects.get(pk = request.GET.get('chatID'))
     return render(request, 'chats/chat.html', {'room' : room})
+
+def get_my_user_info(request):
+    user = request.user
+    request_data = user
+    return HttpResponse(user.username)

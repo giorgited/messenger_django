@@ -250,12 +250,14 @@ p {
     }
     
     .other .msg {
+        width: 40%;
+        float: left;
+        margin-bottom: 10px;
         order: 1;
         border-top-left-radius: 0px;
         box-shadow: -1px 2px 0px #D4D4D4;
     }
     .other:before {
-        content: "";
         position: relative;
         top: 0px;
         right: 0px;
@@ -266,12 +268,20 @@ p {
         border-left-color: transparent;
         border-bottom-color: transparent;
     }
-    
+    .other {
+        justify-content: flex-end;
+        align-items: flex-end;
+        display: flow-root;
+    }
     .self {
         justify-content: flex-end;
         align-items: flex-end;
+        display: flow-root;
     }
     .self .msg {
+        width:50%;
+        float:right;
+        margin-bottom: 10px;
         order: 1;
         border-bottom-right-radius: 0px;
         box-shadow: 1px 2px 0px #D4D4D4;
@@ -460,7 +470,6 @@ p {
       /* position: fixed;
        top: 0%;
        left: 0%; */
-       border:solid 1px green;
        overflow:hidden;
     }
     
@@ -469,7 +478,7 @@ p {
        position: relative;
        top: 0%;
        left: 50%;  */
-       border:solid 1px red; 
+       border:solid 1px black; 
        overflow-y: scroll;
        height: 200px;
     
