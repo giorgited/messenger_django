@@ -1,19 +1,201 @@
 {% extends 'logedin_base.html' %} {% block body%}
 
+{% load static %}
+<script src="{% static "channels/js/websocketbridge.js" %}" type="text/javascript"></script>
+<link rel="stylesheet" href="{% static "css/join-style.css" %}">
 
-{% for room in rooms %}   
+<ul class="rooms" id="roomList">
+  {% for room in rooms %}
 <div class="container">
-<div class="card-deck">
+      <div class="card-deck">
         <div class="card">
           <div class="card-block">
             <h4 class="card-title">{{room.name}}</h4>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            <a href="/chats/chat?chatID={{room.pk}}" class="btn btn-primary">Join</a>
+            <li class="room-link" data-room-id="{{ room.id }}" >Join</li>
             <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>            
           </div>
         </div>
     </div>
 </div>
-{% endfor %}
+  {% empty %}
+      <p class="empty">No chat rooms defined. Maybe make some in the <a href="{% url 'admin:index' %}">admin</a>?</p>
+  {% endfor %}
+</ul>
+<div id="chats"></div>
+
+
+
+<script>
+  $(function () {
+      // Correctly decide between ws:// and wss://
+      var ws_path = "/chats/stream/";
+      console.log("Connecting to " + ws_path);
+
+      var webSocketBridge = new channels.WebSocketBridge();
+      webSocketBridge.connect(ws_path);
+      // Handle incoming messages
+      webSocketBridge.listen(function(data) {
+          // Decode the JSON
+          console.log("Got websocket message", data);
+          // Handle errors
+          if (data.error) {
+              alert(data.error);
+              return;
+          }
+          // Handle joining
+          if (data.join) {
+              console.log("Joining room " + data.join);
+              var roomdiv = $( "<div class='container'>" +    
+                                  "<div class='row'>" +
+                                    "<div class='col-xs-12 outer'>" +
+                                      "<div class='row'>" +
+                                        "<div class='col-xs-4 leftcol fixed' id='room-users" + data.join + "'>" +
+                                          "<ol class='users_list'></ol>" +
+                                        "</div>" +
+                                        "<div class='col-xs-8 rightcol scrollit' id='room-messages" + data.join + "'>" +
+                                          "<ol class='chat'></ol>" +
+                                        "</div>" +
+                                        "<form><input class='textarea' type='text' placeholder='Type here! Press enter to send!'><button class='submit-message'>Send</button></form>" +
+                                "</div>")
+                                        // "<div class='type_area'>" +
+                                        //   "<input class='textarea' type='text' placeholder='Type here! Press enter to send!' />" +
+                                        //   "<div class='emojis'></div>" +
+                                        //   "<form><input><button>Send</button></form>" +
+                                        // "</div>")
+              
+              // Hook up send button to send a message
+              roomdiv.find("form").on("submit", function () {
+                  webSocketBridge.send({
+                      "command": "send",
+                      "room": data.join,
+                      "message": roomdiv.find("input").val()
+                  });
+                  roomdiv.find("input").val("");
+                  return false;
+              });
+              $("#chats").append(roomdiv);
+
+              var s = $(window).height()-150 + "px";
+              var room_class_name = "room-messages" + data.join;
+              document.getElementById(room_class_name).style.height = s;
+              // Handle leaving
+          } else if (data.leave) {
+              console.log("Leaving room " + data.leave);
+              $("#room-users" + data.leave).remove();
+              $("#room-messages" + data.leave).remove();
+
+              // Handle getting a message
+          } else if (data.message || data.msg_type != 0) {
+              var msgdiv = $("#room-messages" + data.room );
+              var ok_msg = "";
+              // msg types are defined in chat/settings.py
+              // Only for demo purposes is hardcoded, in production scenarios, consider call a service.
+              switch (data.msg_type) {
+                  case 0:
+                      // Message
+                  var ok_msg=   "<li class='self'>" +
+                      "<div class='msg'>"+
+                        "<p>" + data.username + "</p>" +
+                        "<p>" + data.message + "</p>"       
+                      "<p><time>20:18</time> </div> </li>";
+
+                      // ok_msg = "<div class='message'>" +
+                      //         "<span class='username'>" + data.username + "</span>" +
+                      //         "<span class='body'>" + data.message + "</span>" +
+                      //         "</div>";
+                      break;
+                  case 1:
+                      // Warning / Advice messages
+                      ok_msg = "<div class='contextual-message text-warning'>" + data.message +
+                              "</div>";
+                      break;
+                  case 2:
+                      // Alert / Danger messages
+                      ok_msg = "<div class='contextual-message text-danger'>" + data.message +
+                              "</div>";
+                      break;
+                  case 3:
+                      // "Muted" messages
+                      ok_msg = "<div class='contextual-message text-muted'>" + data.message +
+                              "</div>";
+                      break;
+                  case 4:
+                      // User joined room
+                      ok_msg = "<div class='contextual-message text-muted'>" + data.username +
+                              " joined the room!" +
+                              "</div>";
+                      break;
+                  case 5:
+                      // User left room
+                      ok_msg = "<div class='contextual-message text-muted'>" + data.username +
+                              " left the room!" +
+                              "</div>";
+                      break;
+                  default:
+                      console.log("Unsupported message type!");
+                      return;
+              }
+              msgdiv.append(ok_msg);
+
+              msgdiv.scrollTop(msgdiv.prop("scrollHeight"));
+          } else {
+              console.log("Cannot handle message!");
+          }
+      });
+
+      // Says if we joined a room or not by if there's a div for it
+      inRoom = function (roomId) {
+          return $("#room-" + roomId).length > 0;
+      };
+
+      // Room join/leave
+      $("li.room-link").click(function () {
+        document.getElementById("roomList").style.display = "none";
+        document.getElementById("chats").style.display = "inline";
+        console.log("clicked")
+
+
+        roomId = $(this).attr("data-room-id");
+
+        // var users = $('#room-users' + roomId)
+        // if (users){
+        //   debugger;
+        //   if ($(".users_list")[0]){
+        //     $(".users_list")[0].append($(
+        //         "<li><h6>" + "user" + "</h6></li>"
+        //   ))  
+        //   }
+          
+        // }
+          if (inRoom(roomId)) {
+              // Leave room
+              $(this).removeClass("joined");
+              webSocketBridge.send({
+                  "command": "leave",
+                  "room": roomId
+              });
+          } else {
+              // Join room
+              $(this).addClass("joined");
+              webSocketBridge.send({
+                  "command": "join",
+                  "room": roomId
+              });
+          }
+      });
+
+      // Helpful debugging
+      webSocketBridge.socket.onopen = function () {
+          console.log("Connected to chat socket");
+      };
+      webSocketBridge.socket.onclose = function () {
+          console.log("Disconnected from chat socket");
+      }
+  });
+</script>
+
+
+
+
 
 {% endblock %}
