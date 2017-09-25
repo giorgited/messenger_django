@@ -1,10 +1,30 @@
 {% extends 'not_logedin_base.html' %} 
 
 {% block body%}
+{% load static %}
+<link rel="stylesheet" href="{% static 'accounts/register-style.css' %}">
+
 <div class="container ">
     <form method="post">
         {% csrf_token %} {{ form.as_p}}
+        <!-- <option
+            data-img-src="{% static 'accounts/images/avatars/girl_1.png' %}"
+            value='42'> -->
+            <b>Choose Your Avatar:</b>
+            <div class="row">
+                <div class="col-md-12">                            
+                        <div class="item active">
+                            <div class="row">
+                              <img src="{% static 'accounts/images/avatars/girl_1.png' %}" class="avatar" alt="Cinque Terre">
+                              <div class="col-md-3"><a href="#" class="thumbnail"><img src="{% static 'accounts/images/avatars/girl_1.png' %}" alt="Image" style="max-width:100%;"></a></div>
+                              <div class="col-md-3"><a href="#" class="thumbnail"><img src="{% static 'accounts/images/avatars/girl_2.png' %}" alt="Image" style="max-width:100%;"></a></div>
+                              <div class="col-md-3"><a href="#" class="thumbnail"><img src="{% static 'accounts/images/avatars/man_beard_avatar.png' %}" alt="Image" style="max-width:100%;"></a></div>
+                              <div class="col-md-3"><a href="#" class="thumbnail"><img src="{% static 'accounts/images/avatars/man_green_avatar.png' %}" alt="Image" style="max-width:100%;"></a></div>
+                            </div><!--.row-->
+                        </div><!--.item-->                         
+                </div>
         <button class="btn btn-md btn-success" type="submit" name="button">Register</button>
+
     </form>
 </div>
 {% endblock %}

@@ -3,7 +3,10 @@ Steps to start the project:
 1. clone the repo
 2. cd into the project 
 3. If not already install python3, django 
-4. $source myvenv/bin/activate
+4. $source myvenv/bin/activate (linux), 
+    if on windows -- open CMD (wont work in PS) cd into PROJ, 
+         $virtualenv myv
+         $./myv/Scripts/activate.bat
 5. $python manage.py migrate (migrate the db)
 6. $python manage.py runserver (start the server and project) 
 7. go to localhost:8000
