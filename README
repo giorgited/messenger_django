@@ -26,3 +26,4 @@ ImportError: Couldn't import Django. Are you sure it's installed and available o
    re run step #4
 2. project starts but its throwing errors regarding DB and sqlite
   -- most likely you have not migrated properly, rerun step#5
+ 
