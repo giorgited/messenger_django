@@ -2,7 +2,8 @@ Steps to start the project:
 
 1. clone the repo
 2. cd into the project 
-3. If not already install python3, django 
+3. If not already install python3, django, channels (pip install python3; pip install django; pip install channels;)
+    - installing channels will require you to have C++ build tools. download from here http://landinghub.visualstudio.com/visual-cpp-build-tools
 4. $source myvenv/bin/activate (linux), 
     if on windows -- open CMD (wont work in PS) cd into PROJ, 
          $virtualenv myv
