@@ -142,6 +142,7 @@ a{
     order: 1;
     border-top-left-radius: 0px;
     box-shadow: -1px 2px 0px #D4D4D4;
+    background: green;
 }
 .other:before {
     content: "";
@@ -164,6 +165,7 @@ a{
     order: 1;
     border-bottom-right-radius: 0px;
     box-shadow: 1px 2px 0px #D4D4D4;
+    background: blue;
 }
 .self .avatar {
     order: 2;
@@ -183,7 +185,6 @@ a{
 }
 
 .msg {
-    background: white;
     min-width: 50px;
     padding: 10px;
     border-radius: 2px;

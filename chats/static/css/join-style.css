@@ -256,6 +256,7 @@ p {
         order: 1;
         border-top-left-radius: 0px;
         box-shadow: -1px 2px 0px #D4D4D4;
+        background: RGBA(44,218,44,0.4);
     }
     .other:before {
         position: relative;
@@ -285,6 +286,7 @@ p {
         order: 1;
         border-bottom-right-radius: 0px;
         box-shadow: 1px 2px 0px #D4D4D4;
+        background: RGBA(0,196,255,0.3);
     }
     .self .avatar {
         order: 2;
@@ -304,7 +306,6 @@ p {
     }
     
     .msg {
-        background: white;
         min-width: 50px;
         padding: 10px;
         border-radius: 2px;

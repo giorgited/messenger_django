@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserChangeForm
 from chats.models import ChatRoom
 from accounts.models import User
 
+@login_required
 def create_chat(request):
     chatRoom = ChatRoom()
     chatRoom.name = 'test'
@@ -29,6 +30,7 @@ def create_chat(request):
         }
         return render(request, 'chats/create_chat.html', args)
 
+@login_required
 def join_chat(request):
     rooms = ChatRoom.objects.all()
     for room in rooms:
@@ -36,10 +38,12 @@ def join_chat(request):
 
     return render(request, 'chats/join_chat.html', {'rooms': rooms, 'user': request.user})
 
+@login_required
 def entered_chat(request):
     room = ChatRoom.objects.get(pk = request.GET.get('chatID'))
     return render(request, 'chats/chat.html', {'room' : room})
 
+@login_required
 def get_my_user_info(request):
     user = request.user
     request_data = user

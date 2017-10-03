@@ -106,13 +106,13 @@
                       var time = new Date();
                       if (data.username == current_user_username){
                           ok_msg=   "<li class='self'>" +
-                              "<div class='msg'>"+
+                              "<div class='msg self'>"+
                                 "<p><i>" + data.username + ":</i></p>" +
                                 "<p><b>" + data.message + "</b></p>"     +  
                                 "<p><time>" + time.getHours() + ":" + time.getMinutes() + "</time></div> </li></br>";
                       } else {
                         ok_msg=   "<li class='other'>" +
-                              "<div class='msg'>"+
+                              "<div class='msg other'>"+
                                 "<p><i>" + data.username + ":</i></p>" +
                                 "<p><b>" + data.message + "</b></p>" +      
                                 "<p><time>" + time.getHours() + ":" + time.getMinutes() + "</time></div> </li></br>";
